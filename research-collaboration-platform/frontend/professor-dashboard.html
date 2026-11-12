@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professor Studio · Atlas Commons</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171512'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-style='italic' font-size='36' fill='%23f4f1ea' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <!-- ************************ Nav ************************ -->
+  <nav class="nav">
+    <a class="brand" href="#top">
+      <div class="logo-mark">A</div>
+      <div>
+        <div class="brand-name">Atlas Commons</div>
+        <span class="brand-sub">Professor Studio</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#announcements">Announcements</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="user-chip">
+      <div class="avatar" id="userAvatar">·</div>
+      <div class="who">
+        <b id="userName">—</b>
+        <span>Professor</span>
+      </div>
+    </div>
+    <button class="icon-btn" id="logoutBtn" title="Sign out" aria-label="Sign out">
+      <i data-lucide="log-out"></i>
+    </button>
+  </nav>
+
+  <main class="page" id="top">
+    <!-- ************************ Hero ************************ -->
+    <header class="hero">
+      <span class="eyebrow">Professor studio</span>
+      <div class="hero-row">
+        <div>
+          <h1 id="greeting">Welcome to the studio.</h1>
+          <p class="lede">Publish a research announcement, review join requests, and keep your teams moving.</p>
+        </div>
+        <button class="btn btn-accent" id="openPublishBtn">
+          <i data-lucide="megaphone"></i>
+          <span>Publish announcement</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ************************ Stats ************************ -->
+    <section class="stats" aria-label="Overview statistics">
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="megaphone"></i></div>
+        <div><div class="num" id="statProjects">0</div><div class="lbl">Announcements</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="inbox"></i></div>
+        <div><div class="num" id="statPending">0</div><div class="lbl">Pending requests</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="users"></i></div>
+        <div><div class="num" id="statJoined">0</div><div class="lbl">Joined students</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="list-checks"></i></div>
+        <div><div class="num" id="statTasks">0</div><div class="lbl">Tasks assigned</div></div>
+      </div>
+    </section>
+
+    <!-- ********************** Projects ********************** -->
+    <div class="section-head" id="announcements">
+      <h2>Your announcements</h2>
+      <span class="count-note" id="countNote"></span>
+    </div>
+    <section class="p-list" id="projectList"></section>
+  </main>
+
+  <footer class="footer">
+    <span>Atlas Commons — Research Collaboration Platform</span>
+    <span>FastAPI backend · Vanilla JS client</span>
+  </footer>
+
+  <!-- ******************* Publish modal ******************** -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <span class="eyebrow">New announcement</span>
+          <h3 id="modalTitle">Publish research project</h3>
+        </div>
+        <button class="modal-close" id="closeModalBtn" aria-label="Close">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="form-error" id="modalError">
+        <i data-lucide="alert-circle"></i>
+        <span></span>
+      </div>
+
+      <form id="publishForm" novalidate>
+        <div class="field">
+          <label for="pTitle">Project title</label>
+          <input id="pTitle" name="title" type="text" placeholder="e.g. Microplastic drift in urban watersheds" required />
+        </div>
+
+        <div class="field">
+          <label>Category</label>
+          <div class="cat-options">
+            <label class="cat-opt" data-cat="Environment Research">
+              <input type="radio" name="category" value="Environment Research" checked />
+              <span>Environment<br />Research</span>
+            </label>
+            <label class="cat-opt" data-cat="AI Understandability">
+              <input type="radio" name="category" value="AI Understandability" />
+              <span>AI Understand&shy;ability</span>
+            </label>
+            <label class="cat-opt" data-cat="Different Workspaces">
+              <input type="radio" name="category" value="Different Workspaces" />
+              <span>Different<br />Workspaces</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="pDescription">Description &amp; goals</label>
+          <textarea id="pDescription" name="description" placeholder="What is this research about? What will students investigate, build, or measure?" required></textarea>
+        </div>
+
+        <button class="btn btn-accent btn-block" type="submit" id="publishBtn">
+          <span class="btn-label">Publish announcement</span>
+          <i data-lucide="send"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="api.js"></script>
+  <script src="js/professor-dashboard.js"></script>
+</body>
+</html>

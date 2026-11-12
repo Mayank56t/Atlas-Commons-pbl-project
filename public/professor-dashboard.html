@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professor Studio · Atlas Commons</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171512'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-style='italic' font-size='36' fill='%23f4f1ea' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <!-- ************************ Nav ************************ -->
+  <nav class="nav">
+    <a class="brand" href="#top">
+      <div class="logo-mark">A</div>
+      <div>
+        <div class="brand-name">Atlas Commons</div>
+        <span class="brand-sub">Professor Studio</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#announcements">Announcements</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="user-chip">
+      <div class="avatar" id="userAvatar">·</div>
+      <div class="who">
+        <b id="userName">—</b>
+        <span>Professor</span>
+      </div>
+    </div>
+    <button class="icon-btn" id="logoutBtn" title="Sign out" aria-label="Sign out">
+      <i data-lucide="log-out"></i>
+    </button>
+  </nav>
+
+  <main class="page" id="top">
+    <!-- ************************ Hero ************************ -->
+    <header class="hero">
+      <span class="eyebrow">Professor studio</span>
+      <div class="hero-row">
+        <div>
+          <h1 id="greeting">Welcome to the studio.</h1>
+          <p class="lede">Publish a research announcement, review join requests, and keep your teams moving.</p>
+        </div>
+        <button class="btn btn-accent" id="openPublishBtn">
+          <i data-lucide="megaphone"></i>
+          <span>Publish announcement</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ************************ Stats ************************ -->
+    <section class="stats" aria-label="Overview statistics">
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="megaphone"></i></div>
+        <div><div class="num" id="statProjects">0</div><div class="lbl">Announcements</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="inbox"></i></div>
+        <div><div class="num" id="statPending">0</div><div class="lbl">Pending requests</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="users"></i></div>
+        <div><div class="num" id="statJoined">0</div><div class="lbl">Joined students</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="list-checks"></i></div>
+        <div><div class="num" id="statTasks">0</div><div class="lbl">Tasks assigned</div></div>
+      </div>
+    </section>
+
+    <!-- ********************** Projects ********************** -->
+    <div class="section-head" id="announcements">
+      <h2>Your announcements</h2>
+      <span class="count-note" id="countNote"></span>
+    </div>
+    <section class="p-list" id="projectList"></section>
+  </main>
+
+  <footer class="footer">
+    <span>Atlas Commons — Research Collaboration Platform</span>
+    <span>JWT-secured API · Vanilla JS client</span>
+  </footer>
+
+  <!-- ******************* Publish modal ******************** -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div>
+          <span class="eyebrow">New announcement</span>
+          <h3 id="modalTitle">Publish research project</h3>
+        </div>
+        <button class="modal-close" id="closeModalBtn" aria-label="Close">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <div class="form-error" id="modalError">
+        <i data-lucide="alert-circle"></i>
+        <span></span>
+      </div>
+
+      <form id="publishForm" novalidate>
+        <div class="field">
+          <label for="pTitle">Project title</label>
+          <input id="pTitle" name="title" type="text" placeholder="e.g. Microplastic drift in urban watersheds" required />
+        </div>
+
+        <div class="field">
+          <label>Category</label>
+          <div class="cat-options">
+            <label class="cat-opt" data-cat="Environment Research">
+              <input type="radio" name="category" value="Environment Research" checked />
+              <span>Environment<br />Research</span>
+            </label>
+            <label class="cat-opt" data-cat="AI Understandability">
+              <input type="radio" name="category" value="AI Understandability" />
+              <span>AI Understand&shy;ability</span>
+            </label>
+            <label class="cat-opt" data-cat="Different Workspaces">
+              <input type="radio" name="category" value="Different Workspaces" />
+              <span>Different<br />Workspaces</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="pDescription">Description &amp; goals</label>
+          <textarea id="pDescription" name="description" placeholder="What is this research about? What will students investigate, build, or measure?" required></textarea>
+        </div>
+
+        <button class="btn btn-accent btn-block" type="submit" id="publishBtn">
+          <span class="btn-label">Publish announcement</span>
+          <i data-lucide="send"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var auth = requireAuth("PROFESSOR");
+      if (!auth) return;
+
+      /* --------------------- Elements --------------------- */
+      var els = {
+        list: document.getElementById("projectList"),
+        countNote: document.getElementById("countNote"),
+        statProjects: document.getElementById("statProjects"),
+        statPending: document.getElementById("statPending"),
+        statJoined: document.getElementById("statJoined"),
+        statTasks: document.getElementById("statTasks"),
+        backdrop: document.getElementById("modalBackdrop"),
+        openPublish: document.getElementById("openPublishBtn"),
+        closeModal: document.getElementById("closeModalBtn"),
+        publishForm: document.getElementById("publishForm"),
+        publishBtn: document.getElementById("publishBtn"),
+        modalError: document.getElementById("modalError"),
+        greeting: document.getElementById("greeting"),
+        logout: document.getElementById("logoutBtn"),
+      };
+
+      /* ------------------- Identity ----------------------- */
+      document.getElementById("userName").textContent = auth.name;
+      document.getElementById("userAvatar").textContent = initials(auth.name);
+      var first = auth.name.trim().split(" ")[0];
+      var hour = new Date().getHours();
+      var day = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
+      els.greeting.innerHTML = "Good " + day + ", <em>" + escapeHtml(first) + "</em>.";
+
+      els.logout.addEventListener("click", Auth.logout);
+
+      /* --------------------- State ------------------------ */
+      var state = { projects: [], open: new Set() };
+
+      /* --------------------- Rendering -------------------- */
+      function statusLabel(s) { return STATUS_LABELS[s] || s; }
+
+      function renderStats() {
+        var pending = 0, joined = 0, tasks = 0;
+        state.projects.forEach(function (p) {
+          p.applications.forEach(function (a) {
+            if (a.status === "PENDING") pending++;
+            if (a.status === "JOINED") joined++;
+          });
+          tasks += p.tasks.length;
+        });
+        els.statProjects.textContent = state.projects.length;
+        els.statPending.textContent = pending;
+        els.statJoined.textContent = joined;
+        els.statTasks.textContent = tasks;
+        els.countNote.textContent =
+          state.projects.length === 0
+            ? "Nothing published yet"
+            : state.projects.length + (state.projects.length === 1 ? " announcement published · click a card to manage" : " announcements published · click a card to manage");
+      }
+
+      function renderProjects() {
+        if (state.projects.length === 0) {
+          els.list.innerHTML =
+            '<div class="empty-state">' +
+            '<div class="icon-ring"><i data-lucide="megaphone"></i></div>' +
+            "<h3>No announcements yet</h3>" +
+            "<p>Publish your first research announcement and students will start requesting to join.</p>" +
+            "</div>";
+          icons();
+          return;
+        }
+
+        els.list.innerHTML = state.projects.map(function (p, idx) {
+          var pending = p.applications.filter(function (a) { return a.status === "PENDING"; });
+          var joined = p.applications.filter(function (a) { return a.status === "JOINED"; });
+          var open = state.open.has(p.id);
+
+          /* ---- join requests ---- */
+          var requestsHtml = pending.length
+            ? pending.map(function (a) {
+                return (
+                  '<div class="request-row">' +
+                  '<div class="avatar">' + escapeHtml(initials(a.studentName)) + "</div>" +
+                  '<div class="who"><b>' + escapeHtml(a.studentName) + "</b><span>" + escapeHtml(a.studentEmail || "") + "</span></div>" +
+                  '<div class="actions">' +
+                  '<button class="btn btn-soft btn-sm" data-approve="' + a.id + '"><i data-lucide="check"></i><span>Approve</span></button>' +
+                  '<button class="btn btn-danger btn-sm" data-decline="' + a.id + '"><i data-lucide="x"></i></button>' +
+                  "</div></div>"
+                );
+              }).join("")
+            : '<div class="mini-empty">No pending requests right now.</div>';
+
+          /* ---- team + tasks ---- */
+          var teamHtml = joined.length
+            ? joined.map(function (a) {
+                var memberTasks = p.tasks.filter(function (t) { return t.studentId === a.studentId; });
+                var tasksHtml = memberTasks.length
+                  ? memberTasks.map(function (t) {
+                      return (
+                        '<div class="member-task">' +
+                        "<div><b>" + escapeHtml(t.title) + "</b>" +
+                        (t.goalDescription ? "<small>" + escapeHtml(t.goalDescription) + "</small>" : "") +
+                        "</div>" +
+                        '<span class="pill" data-status="' + t.status + '">' + statusLabel(t.status) + "</span>" +
+                        "</div>"
+                      );
+                    }).join("")
+                  : '<div class="mini-empty">No tasks assigned yet.</div>';
+
+                return (
+                  '<div class="member-block">' +
+                  '<div class="member-head">' +
+                  '<div class="avatar">' + escapeHtml(initials(a.studentName)) + "</div>" +
+                  "<div><b>" + escapeHtml(a.studentName) + "</b><br /><span>" + escapeHtml(a.studentEmail || "") + "</span></div>" +
+                  '<div class="grow"></div>' +
+                  '<button class="btn btn-danger btn-sm" data-decline="' + a.id + '" title="Remove from project"><i data-lucide="user-minus"></i></button>' +
+                  "</div>" +
+                  '<div class="member-tasks">' +
+                  tasksHtml +
+                  '<form class="assign-form" data-project="' + p.id + '" data-student="' + a.studentId + '">' +
+                  '<input name="title" placeholder="New task title…" required minlength="3" />' +
+                  '<textarea name="goalDescription" placeholder="Goal description (optional)…"></textarea>' +
+                  '<div class="row-end"><button class="btn btn-ink btn-sm" type="submit"><i data-lucide="plus"></i><span>Assign task</span></button></div>' +
+                  "</form>" +
+                  "</div></div>"
+                );
+              }).join("")
+            : '<div class="mini-empty">No students have joined yet. Approve a request to build the team.</div>';
+
+          return (
+            '<article class="p-card' + (open ? " open" : "") + '" style="animation-delay:' + idx * 60 + 'ms">' +
+            '<button class="p-card-head" data-toggle="' + p.id + '">' +
+            '<div class="titles">' +
+            '<div class="top"><span class="badge" data-cat="' + escapeHtml(p.category) + '">' + escapeHtml(p.category) + "</span><h3>" + escapeHtml(p.title) + "</h3></div>" +
+            '<div class="sub">' +
+            "<span><i data-lucide=\"calendar\"></i>" + fmtDate(p.createdAt) + "</span>" +
+            "</div></div>" +
+            '<div class="counts">' +
+            '<span class="count-tag' + (pending.length ? " hot" : "") + '"><i data-lucide="inbox"></i>' + pending.length + " pending</span>" +
+            '<span class="count-tag"><i data-lucide="users"></i>' + joined.length + " joined</span>" +
+            '<span class="count-tag"><i data-lucide="list-checks"></i>' + p.tasks.length + " tasks</span>" +
+            "</div>" +
+            '<span class="chev"><i data-lucide="chevron-down"></i></span>' +
+            "</button>" +
+            '<div class="p-card-body">' +
+            '<div class="p-col"><h4><i data-lucide="inbox"></i>Join requests</h4>' + requestsHtml + "</div>" +
+            '<div class="p-col"><h4><i data-lucide="users"></i>Team &amp; tasks</h4>' + teamHtml + "</div>" +
+            "</div></article>"
+          );
+        }).join("");
+
+        icons();
+      }
+
+      function render() {
+        renderStats();
+        renderProjects();
+      }
+
+      /* --------------------- Data loading ------------------ */
+      async function load() {
+        els.list.innerHTML = '<div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div>';
+        try {
+          var data = await apiFetch("/api/projects/mine");
+          state.projects = data.projects;
+          render();
+        } catch (err) {
+          els.list.innerHTML =
+            '<div class="empty-state"><div class="icon-ring"><i data-lucide="cloud-off"></i></div>' +
+            "<h3>Could not load announcements</h3><p>" + escapeHtml(err.message) + "</p></div>";
+          icons();
+        }
+      }
+
+      /* --------------------- Interactions ------------------ */
+      els.list.addEventListener("click", function (event) {
+        var toggleBtn = event.target.closest("[data-toggle]");
+        if (toggleBtn) {
+          var id = Number(toggleBtn.getAttribute("data-toggle"));
+          if (state.open.has(id)) state.open.delete(id); else state.open.add(id);
+          renderProjects();
+          return;
+        }
+
+        var approveBtn = event.target.closest("[data-approve]");
+        if (approveBtn) {
+          setButtonLoading(approveBtn, true);
+          apiFetch("/api/applications/" + approveBtn.getAttribute("data-approve"), {
+            method: "PUT",
+            body: { status: "JOINED" },
+          })
+            .then(function () { toast("Student approved and joined the project."); load(); })
+            .catch(function (err) { toast(err.message, "error"); load(); });
+          return;
+        }
+
+        var declineBtn = event.target.closest("[data-decline]");
+        if (declineBtn) {
+          setButtonLoading(declineBtn, true);
+          apiFetch("/api/applications/" + declineBtn.getAttribute("data-decline"), { method: "DELETE" })
+            .then(function () { toast("Request updated."); load(); })
+            .catch(function (err) { toast(err.message, "error"); load(); });
+        }
+      });
+
+      els.list.addEventListener("submit", function (event) {
+        var form = event.target.closest(".assign-form");
+        if (!form) return;
+        event.preventDefault();
+        var btn = form.querySelector('button[type="submit"]');
+        var title = form.title.value.trim();
+        var goal = form.goalDescription.value.trim();
+        if (title.length < 3) { toast("Task title must be at least 3 characters.", "error"); return; }
+        setButtonLoading(btn, true);
+        apiFetch("/api/tasks", {
+          method: "POST",
+          body: {
+            projectId: Number(form.getAttribute("data-project")),
+            studentId: Number(form.getAttribute("data-student")),
+            title: title,
+            goalDescription: goal,
+          },
+        })
+          .then(function () { toast("Task assigned."); load(); })
+          .catch(function (err) { toast(err.message, "error"); setButtonLoading(btn, false); });
+      });
+
+      /* --------------------- Modal ------------------------- */
+      function openModal() {
+        els.backdrop.classList.add("show");
+        document.body.style.overflow = "hidden";
+      }
+      function closeModal() {
+        els.backdrop.classList.remove("show");
+        document.body.style.overflow = "";
+        els.modalError.classList.remove("show");
+      }
+      els.openPublish.addEventListener("click", openModal);
+      els.closeModal.addEventListener("click", closeModal);
+      els.backdrop.addEventListener("click", function (e) { if (e.target === els.backdrop) closeModal(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+
+      els.publishForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        els.modalError.classList.remove("show");
+        var form = els.publishForm;
+        var payload = {
+          title: form.title.value.trim(),
+          description: form.description.value.trim(),
+          category: form.querySelector('input[name="category"]:checked').value,
+        };
+        if (payload.title.length < 4) {
+          els.modalError.querySelector("span").textContent = "Please provide a longer title.";
+          els.modalError.classList.add("show");
+          return;
+        }
+        if (payload.description.length < 10) {
+          els.modalError.querySelector("span").textContent = "Please describe the research briefly (10+ characters).";
+          els.modalError.classList.add("show");
+          return;
+        }
+        setButtonLoading(els.publishBtn, true);
+        try {
+          await apiFetch("/api/projects", { method: "POST", body: payload });
+          toast("Announcement published.");
+          form.reset();
+          closeModal();
+          load();
+        } catch (err) {
+          setButtonLoading(els.publishBtn, false);
+          els.modalError.querySelector("span").textContent = err.message;
+          els.modalError.classList.add("show");
+        }
+      });
+
+      /* ------------------------ Boot ------------------------ */
+      icons();
+      load();
+    })();
+  </script>
+</body>
+</html>

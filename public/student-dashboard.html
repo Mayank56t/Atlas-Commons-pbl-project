@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Commons · Atlas Commons</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171512'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-style='italic' font-size='36' fill='%23f4f1ea' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <!-- ************************ Nav ************************ -->
+  <nav class="nav">
+    <a class="brand" href="#top">
+      <div class="logo-mark">A</div>
+      <div>
+        <div class="brand-name">Atlas Commons</div>
+        <span class="brand-sub">Student Commons</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#browse">Browse research</a>
+      <a href="#board">My task board</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="user-chip">
+      <div class="avatar" id="userAvatar">·</div>
+      <div class="who">
+        <b id="userName">—</b>
+        <span>Student</span>
+      </div>
+    </div>
+    <button class="icon-btn" id="logoutBtn" title="Sign out" aria-label="Sign out">
+      <i data-lucide="log-out"></i>
+    </button>
+  </nav>
+
+  <main class="page" id="top">
+    <!-- ************************ Hero ************************ -->
+    <header class="hero">
+      <span class="eyebrow">Student commons</span>
+      <div class="hero-row">
+        <div>
+          <h1 id="greeting">Find your next question.</h1>
+          <p class="lede">Browse open research announcements, request to join, then track your tasks on the board below.</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ************************ Stats ************************ -->
+    <section class="stats" aria-label="Overview statistics">
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="compass"></i></div>
+        <div><div class="num" id="statAvailable">0</div><div class="lbl">Open projects</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="hourglass"></i></div>
+        <div><div class="num" id="statPending">0</div><div class="lbl">Requests pending</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="users"></i></div>
+        <div><div class="num" id="statJoined">0</div><div class="lbl">Joined projects</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="list-checks"></i></div>
+        <div><div class="num" id="statTasks">0</div><div class="lbl">My tasks</div></div>
+      </div>
+    </section>
+
+    <!-- ********************** Browse ************************ -->
+    <div class="section-head" id="browse">
+      <h2>Browse research announcements</h2>
+      <span class="count-note" id="countNote"></span>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:22px;">
+      <button class="chip active" data-filter="All">All fields</button>
+      <button class="chip" data-filter="Environment Research" data-cat="Environment Research">Environment Research</button>
+      <button class="chip" data-filter="AI Understandability" data-cat="AI Understandability">AI Understandability</button>
+      <button class="chip" data-filter="Different Workspaces" data-cat="Different Workspaces">Different Workspaces</button>
+      <div class="input-wrap" style="margin-left:auto; min-width:220px; flex:0 1 300px;">
+        <input id="searchInput" type="search" placeholder="Search titles or keywords…"
+          style="width:100%; padding:10px 38px 10px 15px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-size:13.5px; outline:none;"
+          onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 4px rgba(51,71,214,0.13)'"
+          onblur="this.style.borderColor='var(--line)'; this.style.boxShadow='none'" />
+        <span style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--ink-3); pointer-events:none; display:grid; place-items:center;">
+          <i data-lucide="search" style="width:15px; height:15px;"></i>
+        </span>
+      </div>
+    </div>
+
+    <section class="project-grid" id="projectGrid"></section>
+
+    <!-- ********************** Task board ********************** -->
+    <div class="section-head" id="board">
+      <h2>My task board</h2>
+      <div class="board-progress">
+        <span id="progressLabel">0% complete</span>
+        <div class="track"><div class="fill" id="progressFill" style="width:0%"></div></div>
+        <span style="color:var(--ink-3)"><i data-lucide="move" style="width:14px; height:14px; vertical-align:-2px;"></i> drag cards to update</span>
+      </div>
+    </div>
+
+    <section class="board" id="taskBoard">
+      <div class="kanban-col" data-col="TO_DO">
+        <div class="kanban-head"><span class="dot"></span><span class="name">To Do</span><span class="count" id="count-Todo">0</span></div>
+        <div class="kanban-items" id="col-TO_DO"></div>
+      </div>
+      <div class="kanban-col" data-col="IN_PROGRESS">
+        <div class="kanban-head"><span class="dot"></span><span class="name">In Progress</span><span class="count" id="count-Doing">0</span></div>
+        <div class="kanban-items" id="col-IN_PROGRESS"></div>
+      </div>
+      <div class="kanban-col" data-col="COMPLETED">
+        <div class="kanban-head"><span class="dot"></span><span class="name">Completed</span><span class="count" id="count-Done">0</span></div>
+        <div class="kanban-items" id="col-COMPLETED"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Atlas Commons — Research Collaboration Platform</span>
+    <span>JWT-secured API · Vanilla JS client</span>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var auth = requireAuth("STUDENT");
+      if (!auth) return;
+
+      /* ------------------- Elements ----------------------- */
+      var grid = document.getElementById("projectGrid");
+      var countNote = document.getElementById("countNote");
+      var searchInput = document.getElementById("searchInput");
+      var chips = Array.prototype.slice.call(document.querySelectorAll(".chip"));
+      var progressFill = document.getElementById("progressFill");
+      var progressLabel = document.getElementById("progressLabel");
+
+      /* ------------------- Identity ----------------------- */
+      document.getElementById("userName").textContent = auth.name;
+      document.getElementById("userAvatar").textContent = initials(auth.name);
+      var first = auth.name.trim().split(" ")[0];
+      var hour = new Date().getHours();
+      var day = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
+      document.getElementById("greeting").innerHTML = "Good " + day + ", <em>" + escapeHtml(first) + "</em>.";
+      document.getElementById("logoutBtn").addEventListener("click", Auth.logout);
+
+      /* --------------------- State ------------------------ */
+      var state = { projects: [], tasks: [], filter: "All", query: "", joiningId: null };
+
+      /* ------------------ Stats rendering ----------------- */
+      function renderStats() {
+        var pending = state.projects.filter(function (p) { return p.myApplicationStatus === "PENDING"; }).length;
+        var joined = state.projects.filter(function (p) { return p.myApplicationStatus === "JOINED"; }).length;
+        document.getElementById("statAvailable").textContent = state.projects.length;
+        document.getElementById("statPending").textContent = pending;
+        document.getElementById("statJoined").textContent = joined;
+        document.getElementById("statTasks").textContent = state.tasks.length;
+      }
+
+      /* ---------------- Project grid rendering ------------- */
+      function visibleProjects() {
+        return state.projects.filter(function (p) {
+          var okFilter = state.filter === "All" || p.category === state.filter;
+          var q = state.query.toLowerCase();
+          var okQuery =
+            !q ||
+            p.title.toLowerCase().indexOf(q) !== -1 ||
+            (p.description || "").toLowerCase().indexOf(q) !== -1 ||
+            (p.professorName || "").toLowerCase().indexOf(q) !== -1;
+          return okFilter && okQuery;
+        });
+      }
+
+      function projectAction(p) {
+        if (state.joiningId === p.id) {
+          return '<button class="btn btn-ghost btn-sm btn-block" disabled><span class="spinner"></span><span>Sending…</span></button>';
+        }
+        if (p.myApplicationStatus === "JOINED") {
+          return '<a class="btn btn-soft btn-sm btn-block" href="#board"><i data-lucide="kanban-square"></i><span>Joined — go to board</span></a>';
+        }
+        if (p.myApplicationStatus === "PENDING") {
+          return '<button class="btn btn-ghost btn-sm btn-block" disabled><i data-lucide="hourglass"></i><span>Request sent — pending</span></button>';
+        }
+        return '<button class="btn btn-ink btn-sm btn-block" data-join="' + p.id + '"><i data-lucide="plus"></i><span>Request to join</span></button>';
+      }
+
+      function renderGrid() {
+        var list = visibleProjects();
+        countNote.textContent = list.length + (list.length === 1 ? " announcement" : " announcements") +
+          (state.filter !== "All" ? " in " + state.filter : "") + (state.query ? ' matching “' + state.query + '”' : "");
+
+        if (list.length === 0) {
+          grid.innerHTML =
+            '<div class="empty-state">' +
+            '<div class="icon-ring"><i data-lucide="telescope"></i></div>' +
+            "<h3>No announcements found</h3>" +
+            "<p>Try a different category or search term — or check back soon.</p>" +
+            "</div>";
+          icons();
+          return;
+        }
+
+        grid.innerHTML = list.map(function (p, idx) {
+          return (
+            '<article class="project-card" style="animation-delay:' + idx * 55 + 'ms">' +
+            '<span class="badge" data-cat="' + escapeHtml(p.category) + '">' + escapeHtml(p.category) + "</span>" +
+            "<h3>" + escapeHtml(p.title) + "</h3>" +
+            '<p class="desc">' + escapeHtml(p.description) + "</p>" +
+            '<div class="card-actions">' + projectAction(p) + "</div>" +
+            '<div class="meta">' +
+            "<span><i data-lucide=\"user\"></i>" + escapeHtml(p.professorName || "Professor") + "</span>" +
+            "<span><i data-lucide=\"users\"></i>" + p.joinedCount + " joined</span>" +
+            "<span><i data-lucide=\"calendar\"></i>" + fmtDate(p.createdAt) + "</span>" +
+            "</div></article>"
+          );
+        }).join("");
+        icons();
+      }
+
+      /* ------------------- Board rendering ------------------ */
+      function taskCard(t) {
+        var idx = STATUS_ORDER.indexOf(t.status);
+        var canBack = idx > 0;
+        var canFwd = idx < STATUS_ORDER.length - 1;
+        return (
+          '<div class="task-card" draggable="true" data-task="' + t.id + '">' +
+          '<div class="t-project"><i data-lucide="flask-conical"></i>' + escapeHtml(t.projectTitle || "Project") + "</div>" +
+          "<h5>" + escapeHtml(t.title) + "</h5>" +
+          (t.goalDescription ? "<p>" + escapeHtml(t.goalDescription) + "</p>" : "") +
+          '<div class="t-foot">' +
+          '<span class="t-date">' + fmtDate(t.updatedAt) + "</span>" +
+          '<span class="move-btns">' +
+          '<button data-move="' + t.id + '" data-dir="-1" ' + (canBack ? "" : "disabled") + ' title="Move back"><i data-lucide="arrow-left"></i></button>' +
+          '<button data-move="' + t.id + '" data-dir="1" ' + (canFwd ? "" : "disabled") + ' title="Move forward"><i data-lucide="arrow-right"></i></button>' +
+          "</span></div></div>"
+        );
+      }
+
+      function renderBoard() {
+        var cols = {
+          TO_DO: document.getElementById("col-TO_DO"),
+          IN_PROGRESS: document.getElementById("col-IN_PROGRESS"),
+          COMPLETED: document.getElementById("col-COMPLETED"),
+        };
+        STATUS_ORDER.forEach(function (status) {
+          var items = state.tasks.filter(function (t) { return t.status === status; });
+          cols[status].innerHTML = items.length
+            ? items.map(taskCard).join("")
+            : '<div class="empty-state"><div class="icon-ring"><i data-lucide="' +
+              (status === "COMPLETED" ? "party-popper" : "package-open") +
+              '"></i></div><p>' +
+              (status === "TO_DO" ? "No tasks waiting" : status === "IN_PROGRESS" ? "Nothing in progress" : "Nothing finished yet") +
+              "</p></div>";
+        });
+        document.getElementById("count-Todo").textContent = state.tasks.filter(function (t) { return t.status === "TO_DO"; }).length;
+        document.getElementById("count-Doing").textContent = state.tasks.filter(function (t) { return t.status === "IN_PROGRESS"; }).length;
+        document.getElementById("count-Done").textContent = state.tasks.filter(function (t) { return t.status === "COMPLETED"; }).length;
+
+        var done = state.tasks.filter(function (t) { return t.status === "COMPLETED"; }).length;
+        var pct = state.tasks.length ? Math.round((done / state.tasks.length) * 100) : 0;
+        progressFill.style.width = pct + "%";
+        progressLabel.textContent = pct + "% complete";
+        icons();
+      }
+
+      function render() {
+        renderStats();
+        renderGrid();
+        renderBoard();
+      }
+
+      /* --------------------- Data loading ------------------- */
+      async function load() {
+        grid.innerHTML = '<div class="skel-grid" style="grid-column:1/-1"><div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div></div>';
+        try {
+          var results = await Promise.all([
+            apiFetch("/api/projects"),
+            apiFetch("/api/tasks"),
+          ]);
+          state.projects = results[0].projects;
+          state.tasks = results[1].tasks;
+          render();
+        } catch (err) {
+          grid.innerHTML =
+            '<div class="empty-state"><div class="icon-ring"><i data-lucide="cloud-off"></i></div>' +
+            "<h3>Could not load projects</h3><p>" + escapeHtml(err.message) + "</p></div>";
+          icons();
+        }
+      }
+
+      /* ----------------- Join a project --------------------- */
+      grid.addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-join]");
+        if (!btn) return;
+        var projectId = Number(btn.getAttribute("data-join"));
+        state.joiningId = projectId;
+        renderGrid();
+        apiFetch("/api/projects/" + projectId + "/join", { method: "POST" })
+          .then(function () {
+            state.projects.forEach(function (p) { if (p.id === projectId) p.myApplicationStatus = "PENDING"; });
+            state.joiningId = null;
+            toast("Request sent — the professor will review it.");
+            render();
+          })
+          .catch(function (err) {
+            state.joiningId = null;
+            toast(err.message, "error");
+            load();
+          });
+      });
+
+      /* ------------------- Filters -------------------------- */
+      chips.forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          chips.forEach(function (c) { c.classList.remove("active"); });
+          chip.classList.add("active");
+          state.filter = chip.getAttribute("data-filter");
+          renderGrid();
+        });
+      });
+
+      searchInput.addEventListener("input", function () {
+        state.query = searchInput.value.trim();
+        renderGrid();
+      });
+
+      /* ------------- Update task status (shared) ------------- */
+      async function moveTask(taskId, newStatus, task) {
+        task.status = newStatus;
+        renderBoard();
+        try {
+          await apiFetch("/api/tasks/" + taskId + "/status", {
+            method: "PUT",
+            body: { status: newStatus },
+          });
+          toast("Task moved to “" + STATUS_LABELS[newStatus] + "”.");
+        } catch (err) {
+          toast(err.message, "error");
+          load();
+        }
+      }
+
+      /* ---------- Quick-move buttons (accessibility) ---------- */
+      document.getElementById("taskBoard").addEventListener("click", function (event) {
+        var btn = event.target.closest("[data-move]");
+        if (!btn || btn.disabled) return;
+        var id = Number(btn.getAttribute("data-move"));
+        var dir = Number(btn.getAttribute("data-dir"));
+        var task = state.tasks.find(function (t) { return t.id === id; });
+        if (!task) return;
+        var next = STATUS_ORDER[STATUS_ORDER.indexOf(task.status) + dir];
+        if (next) moveTask(id, next, task);
+      });
+
+      /* ----------------- Drag & drop board ------------------- */
+      var dragId = null;
+
+      document.getElementById("taskBoard").addEventListener("dragstart", function (event) {
+        var card = event.target.closest(".task-card");
+        if (!card) return;
+        dragId = Number(card.getAttribute("data-task"));
+        card.classList.add("dragging");
+        event.dataTransfer.effectAllowed = "move";
+        try { event.dataTransfer.setData("text/plain", String(dragId)); } catch (_) {}
+      });
+
+      document.getElementById("taskBoard").addEventListener("dragend", function (event) {
+        var card = event.target.closest(".task-card");
+        if (card) card.classList.remove("dragging");
+        dragId = null;
+        document.querySelectorAll(".kanban-col").forEach(function (c) { c.classList.remove("drag-over"); });
+      });
+
+      document.getElementById("taskBoard").addEventListener("dragover", function (event) {
+        var col = event.target.closest(".kanban-col");
+        if (!col) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+        document.querySelectorAll(".kanban-col").forEach(function (c) { c.classList.toggle("drag-over", c === col); });
+      });
+
+      document.getElementById("taskBoard").addEventListener("dragleave", function (event) {
+        var col = event.target.closest(".kanban-col");
+        if (col && !col.contains(event.relatedTarget)) col.classList.remove("drag-over");
+      });
+
+      document.getElementById("taskBoard").addEventListener("drop", function (event) {
+        var col = event.target.closest(".kanban-col");
+        if (!col) return;
+        event.preventDefault();
+        col.classList.remove("drag-over");
+        var target = col.getAttribute("data-col");
+        var task = state.tasks.find(function (t) { return t.id === dragId; });
+        if (!task || task.status === target) return;
+        moveTask(task.id, target, task);
+      });
+
+      /* ------------------------ Boot -------------------------- */
+      icons();
+      load();
+    })();
+  </script>
+</body>
+</html>

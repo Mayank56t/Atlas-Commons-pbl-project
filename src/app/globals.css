@@ -1,0 +1,8 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #0a0c11;
+  color: #f0eee8;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create account · Atlas Commons</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171512'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-style='italic' font-size='36' fill='%23f4f1ea' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <main class="auth-shell">
+    <!-- Brand panel -->
+    <aside class="auth-aside">
+      <div class="aside-brand">
+        <div class="logo-mark">A</div>
+        <div>
+          <div class="b">Atlas Commons</div>
+          <div class="s">Research Collaboration Platform</div>
+        </div>
+      </div>
+
+      <div class="aside-mid">
+        <h1>Bring your <em>curiosity</em>. We bring the room.</h1>
+        <p>
+          Create an account as a professor to publish research announcements,
+          or as a student to join projects and manage your research tasks.
+        </p>
+        <div class="aside-chips">
+          <span class="aside-chip">Environment Research</span>
+          <span class="aside-chip">AI Understandability</span>
+          <span class="aside-chip">Different Workspaces</span>
+        </div>
+      </div>
+
+      <div class="aside-foot">
+        <span>Labs · Classrooms · Field work</span>
+        <span class="line"></span>
+        <span>EST. 2026</span>
+      </div>
+    </aside>
+
+    <!-- Form panel -->
+    <section class="auth-panel">
+      <div class="auth-card">
+        <span class="eyebrow">Join the commons</span>
+        <h2>Create your account</h2>
+        <p class="lede-sub">Pick your role, then tell us who you are.</p>
+
+        <div class="form-error" id="formError">
+          <i data-lucide="alert-circle"></i>
+          <span></span>
+        </div>
+
+        <form id="registerForm" novalidate>
+          <div class="role-picker" role="radiogroup" aria-label="Choose role">
+            <label class="role-opt">
+              <input type="radio" name="role" value="STUDENT" checked />
+              <span>
+                <i data-lucide="graduation-cap"></i>
+                <b>Student</b>
+                <small>Join research projects and manage your tasks.</small>
+              </span>
+            </label>
+            <label class="role-opt">
+              <input type="radio" name="role" value="PROFESSOR" />
+              <span>
+                <i data-lucide="flask-conical"></i>
+                <b>Professor</b>
+                <small>Publish announcements and guide research teams.</small>
+              </span>
+            </label>
+          </div>
+
+          <div class="role-hint student show" id="roleHint">
+            You will browse announcements and <strong>request to join</strong> projects that match your interests.
+          </div>
+
+          <div class="field">
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" placeholder="Dr. Ada Lovelace" autocomplete="name" required />
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" placeholder="you@university.edu" autocomplete="email" required />
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <input id="password" name="password" type="password" placeholder="At least 6 characters" autocomplete="new-password" required />
+              <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+            <span class="hint">Minimum 6 characters. Stored securely — never in plain text.</span>
+          </div>
+
+          <button class="btn btn-ink btn-block" type="submit" id="submitBtn">
+            <span class="btn-label">Create account</span>
+            <i data-lucide="arrow-right"></i>
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Already have an account? <a href="login.html">Sign in</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/api.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      redirectIfAuthed();
+      icons();
+
+      var form = document.getElementById("registerForm");
+      var errorBox = document.getElementById("formError");
+      var submitBtn = document.getElementById("submitBtn");
+      var roleHint = document.getElementById("roleHint");
+      var togglePw = document.getElementById("togglePw");
+      var passwordInput = document.getElementById("password");
+
+      togglePw.addEventListener("click", function () {
+        var visible = passwordInput.type === "text";
+        passwordInput.type = visible ? "password" : "text";
+        togglePw.innerHTML = '<i data-lucide="' + (visible ? "eye" : "eye-off") + '"></i>';
+        icons();
+      });
+
+      form.querySelectorAll('input[name="role"]').forEach(function (radio) {
+        radio.addEventListener("change", function () {
+          var isProf = radio.value === "PROFESSOR" && radio.checked;
+          roleHint.className = "role-hint show" + (isProf ? " professor" : " student");
+          roleHint.innerHTML = isProf
+            ? 'You will <strong>publish research announcements</strong>, review join requests and assign tasks.'
+            : 'You will browse announcements and <strong>request to join</strong> projects that match your interests.';
+        });
+      });
+
+      function showError(msg) {
+        errorBox.querySelector("span").textContent = msg;
+        errorBox.classList.add("show");
+      }
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        errorBox.classList.remove("show");
+
+        var payload = {
+          name: form.name.value.trim(),
+          email: form.email.value.trim(),
+          password: form.password.value,
+          role: form.querySelector('input[name="role"]:checked').value,
+        };
+
+        if (payload.name.length < 2) return showError("Please enter your full name.");
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email))
+          return showError("Please enter a valid email address.");
+        if (payload.password.length < 6)
+          return showError("Password must be at least 6 characters.");
+
+        setButtonLoading(submitBtn, true);
+
+        try {
+          var data = await apiFetch("/api/auth/register", { method: "POST", body: payload });
+          Auth.save({ token: data.token, role: data.role, name: data.name, email: data.email });
+          toast("Account created. Welcome to the commons!");
+          window.setTimeout(function () {
+            window.location.href = Auth.home(data.role);
+          }, 400);
+        } catch (err) {
+          setButtonLoading(submitBtn, false);
+          showError(err.message || "Registration failed. Please try again.");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

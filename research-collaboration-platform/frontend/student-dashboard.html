@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Commons · Atlas Commons</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23171512'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-style='italic' font-size='36' fill='%23f4f1ea' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+  <!-- ************************ Nav ************************ -->
+  <nav class="nav">
+    <a class="brand" href="#top">
+      <div class="logo-mark">A</div>
+      <div>
+        <div class="brand-name">Atlas Commons</div>
+        <span class="brand-sub">Student Commons</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#browse">Browse research</a>
+      <a href="#board">My task board</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="user-chip">
+      <div class="avatar" id="userAvatar">·</div>
+      <div class="who">
+        <b id="userName">—</b>
+        <span>Student</span>
+      </div>
+    </div>
+    <button class="icon-btn" id="logoutBtn" title="Sign out" aria-label="Sign out">
+      <i data-lucide="log-out"></i>
+    </button>
+  </nav>
+
+  <main class="page" id="top">
+    <!-- ************************ Hero ************************ -->
+    <header class="hero">
+      <span class="eyebrow">Student commons</span>
+      <div class="hero-row">
+        <div>
+          <h1 id="greeting">Find your next question.</h1>
+          <p class="lede">Browse open research announcements, request to join, then track your tasks on the board below.</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ************************ Stats ************************ -->
+    <section class="stats" aria-label="Overview statistics">
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="compass"></i></div>
+        <div><div class="num" id="statAvailable">0</div><div class="lbl">Open projects</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="hourglass"></i></div>
+        <div><div class="num" id="statPending">0</div><div class="lbl">Requests pending</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="users"></i></div>
+        <div><div class="num" id="statJoined">0</div><div class="lbl">Joined projects</div></div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon"><i data-lucide="list-checks"></i></div>
+        <div><div class="num" id="statTasks">0</div><div class="lbl">My tasks</div></div>
+      </div>
+    </section>
+
+    <!-- ********************** Browse ************************ -->
+    <div class="section-head" id="browse">
+      <h2>Browse research announcements</h2>
+      <span class="count-note" id="countNote"></span>
+    </div>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:22px;">
+      <button class="chip active" data-filter="All">All fields</button>
+      <button class="chip" data-filter="Environment Research" data-cat="Environment Research">Environment Research</button>
+      <button class="chip" data-filter="AI Understandability" data-cat="AI Understandability">AI Understandability</button>
+      <button class="chip" data-filter="Different Workspaces" data-cat="Different Workspaces">Different Workspaces</button>
+      <div class="input-wrap" style="margin-left:auto; min-width:220px; flex:0 1 300px;">
+        <input id="searchInput" type="search" placeholder="Search titles or keywords…"
+          style="width:100%; padding:10px 38px 10px 15px; border-radius:999px; border:1px solid var(--line); background:var(--card); font-size:13.5px; outline:none;"
+          onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 4px rgba(51,71,214,0.13)'"
+          onblur="this.style.borderColor='var(--line)'; this.style.boxShadow='none'" />
+        <span style="position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--ink-3); pointer-events:none; display:grid; place-items:center;">
+          <i data-lucide="search" style="width:15px; height:15px;"></i>
+        </span>
+      </div>
+    </div>
+
+    <section class="project-grid" id="projectGrid"></section>
+
+    <!-- ********************** Task board ********************** -->
+    <div class="section-head" id="board">
+      <h2>My task board</h2>
+      <div class="board-progress">
+        <span id="progressLabel">0% complete</span>
+        <div class="track"><div class="fill" id="progressFill" style="width:0%"></div></div>
+        <span style="color:var(--ink-3)"><i data-lucide="move" style="width:14px; height:14px; vertical-align:-2px;"></i> drag cards to update</span>
+      </div>
+    </div>
+
+    <section class="board" id="taskBoard">
+      <div class="kanban-col" data-col="TO_DO">
+        <div class="kanban-head"><span class="dot"></span><span class="name">To Do</span><span class="count" id="count-Todo">0</span></div>
+        <div class="kanban-items" id="col-TO_DO"></div>
+      </div>
+      <div class="kanban-col" data-col="IN_PROGRESS">
+        <div class="kanban-head"><span class="dot"></span><span class="name">In Progress</span><span class="count" id="count-Doing">0</span></div>
+        <div class="kanban-items" id="col-IN_PROGRESS"></div>
+      </div>
+      <div class="kanban-col" data-col="COMPLETED">
+        <div class="kanban-head"><span class="dot"></span><span class="name">Completed</span><span class="count" id="count-Done">0</span></div>
+        <div class="kanban-items" id="col-COMPLETED"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Atlas Commons — Research Collaboration Platform</span>
+    <span>FastAPI backend · Vanilla JS client</span>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="api.js"></script>
+  <script src="js/student-dashboard.js"></script>
+</body>
+</html>

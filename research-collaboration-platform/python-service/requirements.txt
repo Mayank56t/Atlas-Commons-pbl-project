@@ -1,0 +1,8 @@
+# Research Collaboration Platform — permitted Python dependencies only
+fastapi          # Web framework
+uvicorn          # ASGI server
+sqlalchemy       # ORM / database access
+pydantic         # Request validation
+psycopg[binary]  # PostgreSQL driver (psycopg v3)
+pyjwt            # JWT (HS256) signing & verification
+bcrypt           # Secure password hashing
